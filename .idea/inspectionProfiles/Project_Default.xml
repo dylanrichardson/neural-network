@@ -5,7 +5,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="84">
+          <list size="93">
             <item index="0" class="java.lang.String" itemvalue="altgraph" />
             <item index="1" class="java.lang.String" itemvalue="pyobjc-framework-WebKit" />
             <item index="2" class="java.lang.String" itemvalue="mac-alias" />
@@ -90,8 +90,26 @@
             <item index="81" class="java.lang.String" itemvalue="pyobjc-framework-QTKit" />
             <item index="82" class="java.lang.String" itemvalue="pytz" />
             <item index="83" class="java.lang.String" itemvalue="pyobjc-framework-ScreenSaver" />
+            <item index="84" class="java.lang.String" itemvalue="protobuf" />
+            <item index="85" class="java.lang.String" itemvalue="tensorflow" />
+            <item index="86" class="java.lang.String" itemvalue="tensorflow-tensorboard" />
+            <item index="87" class="java.lang.String" itemvalue="html5lib" />
+            <item index="88" class="java.lang.String" itemvalue="Werkzeug" />
+            <item index="89" class="java.lang.String" itemvalue="PyYAML" />
+            <item index="90" class="java.lang.String" itemvalue="bleach" />
+            <item index="91" class="java.lang.String" itemvalue="Keras" />
+            <item index="92" class="java.lang.String" itemvalue="Markdown" />
           </list>
         </value>
+      </option>
+    </inspection_tool>
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="numpy.array" />
+          <option value="bool.all" />
+          <option value="keras" />
+        </list>
       </option>
     </inspection_tool>
   </profile>
