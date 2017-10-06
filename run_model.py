@@ -17,7 +17,9 @@ def calc_derivations(true_values, predictions):
     return accuracy, precision, recall
 
 
-def run_model(params):
+def run_model(params, callbacks=None):
+    if callbacks is None:
+        callbacks = []
     import os
     os.environ['TF_CPP_MIN_LOG_LEVEL']='2'
     import sys
@@ -33,7 +35,7 @@ def run_model(params):
 
     model = make_model(params['layers'], params['neurons'], params['activation'], params['weight'])
 
-    history = train_model(model, training, validation, params['epochs'], params['batch'], params['verbose'])
+    history = train_model(model, training, validation, params['epochs'], params['batch'], params['verbose'], callbacks)
 
     predictions = test_model(model, test_set)
 

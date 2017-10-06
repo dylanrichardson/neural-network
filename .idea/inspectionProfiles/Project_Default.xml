@@ -5,7 +5,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="93">
+          <list size="96">
             <item index="0" class="java.lang.String" itemvalue="altgraph" />
             <item index="1" class="java.lang.String" itemvalue="pyobjc-framework-WebKit" />
             <item index="2" class="java.lang.String" itemvalue="mac-alias" />
@@ -99,6 +99,9 @@
             <item index="90" class="java.lang.String" itemvalue="bleach" />
             <item index="91" class="java.lang.String" itemvalue="Keras" />
             <item index="92" class="java.lang.String" itemvalue="Markdown" />
+            <item index="93" class="java.lang.String" itemvalue="scikit-learn" />
+            <item index="94" class="java.lang.String" itemvalue="sklearn" />
+            <item index="95" class="java.lang.String" itemvalue="cycler" />
           </list>
         </value>
       </option>

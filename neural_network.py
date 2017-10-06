@@ -1,15 +1,15 @@
 from preprocess import decode_one_hot_array
-import numpy
 from keras.models import Sequential
 from keras.layers import Dense, Activation
 
 
-def train_model(model, training_set, validation_set, epochs, batch_size, verbosity):
+def train_model(model, training_set, validation_set, epochs, batch_size, verbosity, callbacks):
     history = model.fit(training_set[0], training_set[1],
                         validation_data=(validation_set[0], validation_set[1]),
                         epochs=epochs,
                         batch_size=batch_size,
-                        verbose=verbosity)
+                        verbose=verbosity,
+                        callbacks=callbacks)
     return history
 
 
@@ -30,5 +30,4 @@ def make_model(num_layers, num_neurons, activation, weight_init):
 
 def test_model(model, test_set):
     predictions = model.predict(test_set)
-
     return decode_one_hot_array(predictions)
