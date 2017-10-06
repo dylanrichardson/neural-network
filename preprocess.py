@@ -1,5 +1,5 @@
 import numpy
-import keras
+from keras import utils
 from random import randint
 
 
@@ -17,11 +17,18 @@ def get_raw_labels():
 
 
 def encode_one_hot(raw_labels):
-    return keras.utils.to_categorical(raw_labels, num_classes=10)
+    return utils.to_categorical(raw_labels, num_classes=10)
 
 
 def decode_one_hot(one_hot):
     return int(numpy.argmax(one_hot))
+
+
+def decode_one_hot_array(one_hot_arr):
+    decoded = numpy.zeros(shape=(one_hot_arr.shape[0],))
+    for index in range(len(decoded)):
+        decoded[index] = decode_one_hot(one_hot_arr[index])
+    return decoded
 
 
 def group_by_label(data_labels):

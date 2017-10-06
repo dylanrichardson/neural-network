@@ -109,6 +109,8 @@
           <option value="numpy.array" />
           <option value="bool.all" />
           <option value="keras" />
+          <option value="sys" />
+          <option value="run_model.sklearn" />
         </list>
       </option>
     </inspection_tool>
