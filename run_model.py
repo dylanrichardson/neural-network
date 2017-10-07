@@ -1,20 +1,31 @@
 import argparse
 import numpy
 import warnings
+import os
 from sklearn.metrics import accuracy_score, precision_score, recall_score
+
+from graph import make_training_graph, make_testing_table, make_confusion_matrix
 
 
 def save_to_file(file, *args, **kwds):
     numpy.savez(file, *args, **kwds)
 
 
-def calc_derivations(true_values, predictions):
+def calc_derivations(truth_values, predictions):
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
-        accuracy = accuracy_score(true_values, predictions)
-        precision = precision_score(true_values, predictions, average=None)
-        recall = recall_score(true_values, predictions, average=None)
+        accuracy = accuracy_score(truth_values, predictions)
+        precision = precision_score(truth_values, predictions, average=None)
+        recall = recall_score(truth_values, predictions, average=None)
     return accuracy, precision, recall
+
+
+def save_misclassified(file, truth_values, predictions, test_set):
+    images = []
+    for index, (prediction, truth_value) in enumerate(zip(predictions, truth_values)):
+        if prediction != truth_value:
+            images.append(test_set[index])
+    numpy.save(file, images)
 
 
 def run_model(params, callbacks=None):
@@ -39,6 +50,9 @@ def run_model(params, callbacks=None):
 
     predictions = test_model(model, test_set)
 
+    if params['misclassified']:
+        save_misclassified(params['misclassified'], truth_values, predictions, test_set)
+
     return model, history.history, truth_values, predictions
 
 
@@ -56,37 +70,51 @@ def parse_args():
                         help='the activation function for each layer of the model')
     parser.add_argument('--weight', '-w', default='he_normal',
                         help='the weight initialization for each layer of the model')
-    parser.add_argument('--training', '-t',
+    parser.add_argument('--training',
                         help='the file for saving the training and validation accuracy data')
-    parser.add_argument('--predictions', '-p',
-                        help='the file for saving the predictions on the test set')
+    parser.add_argument('--testing',
+                        help='the file for saving the testing predictions and actual data')
     parser.add_argument('--model', '-m',
                         help='the file for saving the model')
+    parser.add_argument('--misclassified',
+                        help='the file for saving the misclassified images')
     parser.add_argument('--verbose', '-v', action='count',
                         help='print out information')
+    parser.add_argument('--params',
+                        help='the file for loading parameters')
+    parser.add_argument('--graph', '-g',
+                        help='the file for saving graphs')
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+    params = vars(args)
 
-    model, history, truth_values, predictions = run_model(vars(args))
+    if args.params:
+        params = {**params, **numpy.load(args.params).item()}
 
-    if args.model is not None:
+    model, history, truth_values, predictions = run_model(params)
+
+    if args.model:
         model.save(args.model)
 
-    if args.training is not None:
+    if args.training:
         save_to_file(args.training, training=history['acc'], validation=history['val_acc'])
 
+    if args.testing:
+        save_to_file(args.testing, truth_values=truth_values, predictions=predictions)
+
+    if args.graph:
+        os.makedirs(args.graph)
+        make_training_graph(history).save_fig(args.graph + '/training.png')
+        make_testing_table(truth_values, predictions).save_fig(args.graph + '/testing.png')
+        make_confusion_matrix(truth_values, predictions).save_fig(args.graph + '/confusion_matrix.png')
+
     accuracy, precision, recall = calc_derivations(truth_values, predictions)
-
-    if args.predictions is not None:
-        save_to_file(args.predictions, accuracy=accuracy, precision=precision, recall=recall)
-
-    if args.verbose:
-        print('accuracy:', accuracy)
-        print('precision:', precision)
-        print('recall:', recall)
+    print('accuracy:', accuracy)
+    print('precision:', precision)
+    print('recall:', recall)
 
 
 if __name__ == "__main__":

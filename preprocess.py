@@ -90,7 +90,7 @@ def stratify_data(data_labels, percentages):
 def preprocess():
     images = get_images()
     raw_labels = get_raw_labels()
-    stratified = stratify_data((images, raw_labels), (0.6, 0.25, 0.15))
+    stratified = stratify_data((images, raw_labels), (0.6, 0.15, 0.25))
     for i in range(len(stratified)):
         data_labels = list(stratified[i])
         data_labels[1] = encode_one_hot(data_labels[1])

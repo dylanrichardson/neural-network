@@ -1,6 +1,8 @@
 from run_model import run_model, calc_derivations
 import numpy
 from tqdm import tqdm
+import os
+
 
 default_params = {
     'epochs': 100,
@@ -13,11 +15,21 @@ default_params = {
 }
 
 
-param_ranges = {
-    'epochs': range(1, 100, 10),
-    'layers': range(1, 10),
-    'neurons': range(1, 1000, 100),
-    'batch': range(100, 1000, 100),
+opt_params = {
+    'epochs': 90,
+    'layers': 5,
+    'neurons': 60,
+    'batch': 300,
+    'weight': 'glorot_normal',
+    'activation': 'relu'
+}
+
+
+default_param_ranges = {
+    'epochs': list(range(1,10)) + list(range(10, 101, 10)),
+    'layers': list(range(1, 11)),
+    'neurons': list(range(1,10)) + list(range(10, 101, 10)),
+    'batch': list(range(100, 1000, 100)) + list(range(1000, 6001, 1000)),
     'weight': ['he_normal', 'he_uniform', 'lecun_uniform', 'lecun_normal', 'glorot_normal', 'glorot_uniform'],
     'activation': ['relu', 'selu', 'tanh', 'elu', 'sigmoid'],
 }
@@ -25,8 +37,9 @@ param_ranges = {
 
 def optimize(params, ranges, iterations, save_file):
     optimal_params = params
+    os.makedirs(save_file)
     for i in tqdm(range(iterations), desc='Optimization iterations'):
-        param_value_accuracies = experiment_ranges(optimal_params, ranges, save_file)
+        param_value_accuracies = experiment_ranges(optimal_params, ranges, save_file + '/' + str(i) + '.npy')
         for param, (param_values, accuracies) in param_value_accuracies.items():
             optimal_param_value = max_param(param_values, accuracies)
             optimal_params[param] = optimal_param_value
@@ -37,12 +50,25 @@ def max_param(param_values, accuracies):
     return param_values[accuracies.index(max(accuracies))]
 
 
+def make_param_ranges(params1, params2):
+    param_ranges = {}
+    for param in params1:
+        param_ranges[param] = [params1[param]]
+    for param in params2:
+        if param in param_ranges:
+            param_ranges[param].append(params2[param])
+        else:
+            param_ranges[param] = [params2[param]]
+    return param_ranges
+
+
 def experiment_ranges(params, ranges, save_file):
     param_value_accuracies = {}
     for param, param_values in tqdm(ranges.items(), desc='Parameter ranges'):
+        print(param)
         accuracies = experiment(params, param, param_values)
         param_value_accuracies[param] = param_values, accuracies
-        numpy.save(save_file, param_value_accuracies)
+        numpy.save(save_file, {'params': params, 'param_value_accuracies': param_value_accuracies})
     return param_value_accuracies
 
 
@@ -51,6 +77,7 @@ def experiment(params, param, param_values):
     new_params = {**default_params, **params}
     for value in tqdm(param_values, desc='Parameter values'):
         new_params[param] = value
+        print(value)
         _, _, truth_values, predictions = run_model(new_params)
         accuracy, _, _ = calc_derivations(truth_values, predictions)
         accuracies.append(accuracy)
@@ -58,7 +85,7 @@ def experiment(params, param, param_values):
 
 
 def main():
-    optimal_params = optimize(default_params, param_ranges, 100, 'optimize.npy')
+    optimal_params = optimize(opt_params, default_param_ranges, 2, 'optimize1')
     print(optimal_params)
 
 

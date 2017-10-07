@@ -5,7 +5,7 @@
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
-          <list size="96">
+          <list size="103">
             <item index="0" class="java.lang.String" itemvalue="altgraph" />
             <item index="1" class="java.lang.String" itemvalue="pyobjc-framework-WebKit" />
             <item index="2" class="java.lang.String" itemvalue="mac-alias" />
@@ -102,6 +102,13 @@
             <item index="93" class="java.lang.String" itemvalue="scikit-learn" />
             <item index="94" class="java.lang.String" itemvalue="sklearn" />
             <item index="95" class="java.lang.String" itemvalue="cycler" />
+            <item index="96" class="java.lang.String" itemvalue="tqdm" />
+            <item index="97" class="java.lang.String" itemvalue="keras-tqdm" />
+            <item index="98" class="java.lang.String" itemvalue="image" />
+            <item index="99" class="java.lang.String" itemvalue="Django" />
+            <item index="100" class="java.lang.String" itemvalue="olefile" />
+            <item index="101" class="java.lang.String" itemvalue="Pillow" />
+            <item index="102" class="java.lang.String" itemvalue="h5py" />
           </list>
         </value>
       </option>
